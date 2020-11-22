@@ -21,4 +21,9 @@ Loads your Fidelity Portfolio and Screener data, combines them, and runs an anal
 
 5. Swith to this application and upload your Overview data
 
-6. Upload the saved Screener data.  This data will merge together with your portfolio data.
+6. Upload the saved Screener data.  This data will merge together with your portfolio data
+
+## To Do
+
+* Check diversification of each stock %, each sector % and each industry %
+    Show in 3 columns that can later be color highlighted based on over or under diversified

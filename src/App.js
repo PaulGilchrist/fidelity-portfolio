@@ -108,7 +108,7 @@ const App = () => {
             const stock = {
                 // Only get important columns
                 symbol: columns[1],
-                description: columns[2].split("USD")[0],
+                description: columns[2].split("USD")[0].split(" COM")[0].split(" CORP")[0].split(" INC")[0],
                 quantity: Number(columns[3].replace(/[$%",]/g, '')),
                 lastPrice: Number(columns[4].replace(/[$%",]/g, '')),
                 currentValue: Number(columns[6].replace(/[$%",]/g, '')),
@@ -177,6 +177,7 @@ const App = () => {
                 } else if (rows[0].substring(0, 34) === 'Symbol,Company Name,Security Price') {
                     processScreenerResultsBasicFacts(rows);
                 }
+                console.log(stocks);
                 toast.success(`File imported`, {
                     position: "top-right",
                     autoClose: 500,
