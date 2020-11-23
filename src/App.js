@@ -1,5 +1,7 @@
-import React from 'react';
-// import { useDispatch, useSelector } from 'react-redux';
+import React, {useState} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { cloneDeep } from 'lodash'
+
 import { toast } from 'react-toastify' // Must be initialized in App.js (see https://github.com/fkhadra/react-toastify#usage)
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -8,14 +10,14 @@ import 'react-toastify/dist/ReactToastify.min.css';
 
 import css from './app.module.css';
 
-// import {
-//     // Actions
-//     updatePortfolio,
-//     updateScoringRules,
-//     // Selectors
-//     selectorPortfolio,
-//     selectorScoringRules
-// } from './appSlice';
+import {
+    // Actions
+    updatePortfolio,
+    updateScoringRules,
+    // Selectors
+    selectorPortfolio,
+    selectorScoringRules
+} from './appSlice';
 
 import StockChart from './components/StockChart';
 
@@ -23,7 +25,6 @@ const App = () => {
     // Call it once in your app. At the root of your app is the best place
     toast.configure();
 
-    //const forcePrecision = (num, precision=2) => num ? (Math.round(num * 10^precision) / 10^precision).toFixed(precision) : '';
     const forcePrecision = (num, precision = 2) => num ? num.toFixed(precision) : '';
 
     const getScore = (value, rule) => {
@@ -118,6 +119,7 @@ const App = () => {
     }
 
     const processScreenerResultsBasicFacts = (rows) => {
+        portfolio = cloneDeep(portfolio);
         portfolio.sectors = [];
         // Add new row data to stocks
         for (let i = 1 /* skip header row */; i < rows.length; i++) {
@@ -131,8 +133,8 @@ const App = () => {
             let stock = portfolio.stocks.find(s => s.symbol === symbol);
             if (stock) {
                 // Only get important columns
-                stock.sector = columns[7]
-                stock.industry = columns[8];
+                stock.sector = columns[7].replace(/["]/g, '');
+                stock.industry = columns[8].replace(/["]/g, '');
                 // Get sector and industry summations
                 let sector = portfolio.sectors.find(s => s.name === stock.sector);
                 if (sector) {
@@ -177,10 +179,11 @@ const App = () => {
             }
             stock.score = getStockScore(stock);
         }
-        // dispatch(updatePortfolio(portfolio));
+        dispatch(updatePortfolio(portfolio));
     }
 
     const processScreenerResultsSearchCriteria = (rows) => {
+        portfolio = cloneDeep(portfolio);
         for (let i = 1 /* skip header row */; i < rows.length; i++) {
             var columns = splitCSVButIgnoreCommasInDoublequotes(rows[i]);
             // First blank line ends the data portion of the file
@@ -202,13 +205,15 @@ const App = () => {
                 stock.score = getStockScore(stock);
             }
         }
-        // dispatch(updatePortfolio(portfolio));
+        dispatch(updatePortfolio(portfolio));
     }
 
     const processPortfolioOverview = (rows) => {
-        portfolio.currentValue = 0;
-        portfolio.sectors = [];
-        portfolio.stocks = [];
+        let portfolio = {
+            currentValue: 0,
+            sectors: [],
+            stocks: []
+        }
         for (let i = 1 /* skip header row */; i < rows.length; i++) {
             var columns = splitCSVButIgnoreCommasInDoublequotes(rows[i]);
             // First blank line ends the data portion of the file
@@ -245,7 +250,9 @@ const App = () => {
             }
             return 0;
         });
-        // dispatch(updatePortfolio(portfolio));
+        //setPortfolio(portfolio);
+        console.log(portfolio);
+        dispatch(updatePortfolio(portfolio));
     }
 
     // Event Handlers
@@ -318,25 +325,9 @@ const App = () => {
         // Not Implemented Yet
     }
 
-    // const dispatch = useDispatch();
-    // let portfolio = useSelector(selectorPortfolio);
-    // let scoringRules = useSelector(selectorScoringRules);
-
-    let portfolio = {
-        currentValue: 0,
-        sectors: [],
-        stocks: []
-    };
-
-    let scoringRules = {
-        dividendEarningsRatio: { highValueBetter: true, min: 0.015, max: 0.3, weight: 2 },
-        dividendPriceRatio: { highValueBetter: false, min: 0.35, max: 0.5, weight: 2 },
-        industryPercentage: { highValueBetter: false, min: 0.002, max: 0.008, weight: 1 },
-        priceEarningsRatio: { highValueBetter: false, min: 16, max: 25, weight: 2 },
-        sectorPercentage: { highValueBetter: false, min: 0.02, max: 0.04, weight: 1 },
-        stockPercentage: { highValueBetter: false, min: 0.002, max: 0.005, weight: 1 },
-        summaryScore: { weight: 2 } // Neutral will be 0 and each rating above adds 'weight' and below subtracts 'weight'
-    };
+    const dispatch = useDispatch();
+    let portfolio = useSelector(selectorPortfolio);
+    let scoringRules = useSelector(selectorScoringRules);
 
     return (
         <div className={`container-fluid ${css.app}`}>
@@ -348,7 +339,7 @@ const App = () => {
                 <label className="btn btn-info" onClick={handleDataExport}>Export</label>
             </div>
             <div className="d-flex flex-fill justify-content-center">
-                {portfolio.stocks.length > 0 ? <StockChart portfolio={portfolio} onPrintChart={() => handleOnPrintStockChart()}/> : null}
+                {portfolio.stocks.length > 0 ? <StockChart portfolio={portfolio} scoringRules={scoringRules} onPrintChart={() => handleOnPrintStockChart()}/> : null}
             </div>
         </div>
     );

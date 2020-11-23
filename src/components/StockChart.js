@@ -69,7 +69,7 @@ const StockChart = (props) => {
 
     const getSummaryScore = (stock) => {
         let score = 0;
-        const weight = props.portfolio.scoringRules.summaryScore.weight
+        const weight = props.scoringRules.summaryScore.weight
         switch (stock.summaryScore) {
             case 'Very Bullish':
                 score += (weight*2)
@@ -113,8 +113,8 @@ const StockChart = (props) => {
                                     <th>Current Value<br/></th>
                                     <th>Summary Score<br/></th>
                                     <th>P/E<br/></th>
-                                    <th>D/P<br/></th>
-                                    <th>D/E<br/></th>
+                                    <th>Div Yield %<br/></th>
+                                    <th>Div Ratio %<br/></th>
                                     <th>Stock %<br/></th>
                                     <th>Sector %<br/></th>
                                     <th>Industry %<br/></th>
@@ -123,12 +123,12 @@ const StockChart = (props) => {
                             <tbody>
                                 {props.portfolio.stocks.map((stock, index) => {
                                     const summaryScore = getSummaryScore(stock);
-                                    const priceEarningsRatioScore = getScore(stock.priceEarningsRatio, props.portfolio.scoringRules.priceEarningsRatio);
-                                    const dividendPriceRatioScore = getScore(stock.dividendPriceRatio, props.portfolio.scoringRules.dividendPriceRatio);
-                                    const dividendEarningsRatioScore = getScore(stock.dividendEarningsRatio, props.portfolio.scoringRules.dividendEarningsRatio);
-                                    const stockPercentageScore = getScore(stock.stockPercentage, props.portfolio.scoringRules.stockPercentage);
-                                    const sectorPercentageScore = getScore(stock.sectorPercentage, props.portfolio.scoringRules.sectorPercentage);
-                                    const industryPercentageScore = getScore(stock.industryPercentage, props.portfolio.scoringRules.industryPercentage);
+                                    const priceEarningsRatioScore = getScore(stock.priceEarningsRatio, props.scoringRules.priceEarningsRatio);
+                                    const dividendPriceRatioScore = getScore(stock.dividendPriceRatio, props.scoringRules.dividendPriceRatio);
+                                    const dividendEarningsRatioScore = getScore(stock.dividendEarningsRatio, props.scoringRules.dividendEarningsRatio);
+                                    const stockPercentageScore = getScore(stock.stockPercentage, props.scoringRules.stockPercentage);
+                                    const sectorPercentageScore = getScore(stock.sectorPercentage, props.scoringRules.sectorPercentage);
+                                    const industryPercentageScore = getScore(stock.industryPercentage, props.scoringRules.industryPercentage);
                                     return (
                                         <tr key={index}>
                                             <td>{stock.symbol}</td>
@@ -136,19 +136,19 @@ const StockChart = (props) => {
                                             <td>{stock.description}</td>
                                             <td>{stock.sector}</td>
                                             <td>{stock.industry}</td>
-                                            <td>{stock.lastPrice}</td>
+                                            <td>${stock.lastPrice.toFixed(2)}</td>
                                             <td>{stock.quantity}</td>
-                                            <td>{stock.earningsPerShare}</td>
-                                            <td>{stock.dividendPerShare}</td>
-                                            <td>{stock.costBasis}</td>
-                                            <td>{stock.currentValue}</td>
+                                            <td>{stock.earningsPerShare ? `$${stock.earningsPerShare.toFixed(2)}` : null}</td>
+                                            <td>{stock.dividendPerShare ? `$${stock.dividendPerShare.toFixed(2)}` : null}</td>
+                                            <td>{stock.costBasis ? `$${stock.costBasis.toFixed(2)}` : null}</td>
+                                            <td>{stock.currentValue ? `$${stock.currentValue.toFixed(2)}` : null}</td>
                                             <td className={summaryScore > 0 ? 'good' : summaryScore < 0  ? 'bad' : null}>{stock.summaryScore}</td>
-                                            <td className={priceEarningsRatioScore > 0 ? 'good' : priceEarningsRatioScore < 0  ? 'bad' : null}>{stock.priceEarningsRatio}</td>
-                                            <td className={dividendPriceRatioScore > 0 ? 'good' : dividendPriceRatioScore < 0  ? 'bad' : null}>{stock.dividendPriceRatio}</td>
-                                            <td className={dividendEarningsRatioScore > 0 ? 'good' : dividendEarningsRatioScore < 0  ? 'bad' : null}>{stock.dividendEarningsRatio}</td>
-                                            <td className={stockPercentageScore > 0 ? 'good' : stockPercentageScore < 0  ? 'bad' : null}>{stock.stockPercentage}</td>
-                                            <td className={sectorPercentageScore > 0 ? 'good' : sectorPercentageScore < 0  ? 'bad' : null}>{stock.sectorPercentage}</td>
-                                            <td className={industryPercentageScore > 0 ? 'good' : industryPercentageScore < 0  ? 'bad' : null}>{stock.industryPercentage}</td>
+                                            <td className={priceEarningsRatioScore > 0 ? 'good' : priceEarningsRatioScore < 0  ? 'bad' : null}>{stock.priceEarningsRatio ? stock.priceEarningsRatio.toFixed(2) : null}</td>
+                                            <td className={dividendPriceRatioScore > 0 ? 'good' : dividendPriceRatioScore < 0  ? 'bad' : null}>{stock.dividendPriceRatio ? (stock.dividendPriceRatio*100).toFixed(2) : null}</td>
+                                            <td className={dividendEarningsRatioScore > 0 ? 'good' : dividendEarningsRatioScore < 0  ? 'bad' : null}>{stock.dividendEarningsRatio ? (stock.dividendEarningsRatio*100).toFixed(0) : null}</td>
+                                            <td className={stockPercentageScore > 0 ? 'good' : stockPercentageScore < 0  ? 'bad' : null}>{stock.stockPercentage ? (stock.stockPercentage*100).toFixed(2) : null}</td>
+                                            <td className={sectorPercentageScore > 0 ? 'good' : sectorPercentageScore < 0  ? 'bad' : null}>{stock.sectorPercentage ? (stock.sectorPercentage*100).toFixed(2) : null}</td>
+                                            <td className={industryPercentageScore > 0 ? 'good' : industryPercentageScore < 0  ? 'bad' : null}>{stock.industryPercentage ? (stock.industryPercentage*100).toFixed(2) : null}</td>
                                         </tr>
                                     )
                                 })}
