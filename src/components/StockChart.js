@@ -19,8 +19,8 @@ const StockChart = (props) => {
                 }
             ],
             scoringRules: {
-                dividendEarningsRatio: { highValueBetter: boolean, min: number, max: number, weight: number },
-                dividendPriceRatio: { highValueBetter: boolean, min: number, max: number, weight: number },
+                dividendPayoutPercentage: { highValueBetter: boolean, min: number, max: number, weight: number },
+                dividendYieldPercentage { highValueBetter: boolean, min: number, max: number, weight: number },
                 industryPercentage: { highValueBetter: boolean, min: number, max: number, weight: number },
                 priceEarningsRatio: { highValueBetter: boolean, min: number, max: number, weight: number },
                 sectorPercentage: { highValueBetter: boolean, min: number, max: number, weight: number },
@@ -32,9 +32,9 @@ const StockChart = (props) => {
                     costBasis: number,
                     currentValue: number,
                     description: string
-                    dividendEarningsRatio: number,
                     dividendPerShare: number,
-                    dividendPriceRatio: number,
+                    dividendRatio: number,
+                    dividendYieldPercent: number,
                     earningsPerShare: number,
                     industry: string,
                     industryPercentage: number,
@@ -113,8 +113,8 @@ const StockChart = (props) => {
                                     <th>Current Value<br/></th>
                                     <th>Summary Score<br/></th>
                                     <th>P/E<br/></th>
+                                    <th>Div Payout %<br/></th>
                                     <th>Div Yield %<br/></th>
-                                    <th>Div Ratio %<br/></th>
                                     <th>Stock %<br/></th>
                                     <th>Sector %<br/></th>
                                     <th>Industry %<br/></th>
@@ -124,15 +124,20 @@ const StockChart = (props) => {
                                 {props.portfolio.stocks.map((stock, index) => {
                                     const summaryScore = getSummaryScore(stock);
                                     const priceEarningsRatioScore = getScore(stock.priceEarningsRatio, props.scoringRules.priceEarningsRatio);
-                                    const dividendPriceRatioScore = getScore(stock.dividendPriceRatio, props.scoringRules.dividendPriceRatio);
-                                    const dividendEarningsRatioScore = getScore(stock.dividendEarningsRatio, props.scoringRules.dividendEarningsRatio);
+                                    const dividendPayoutPercentageScore = getScore(stock.dividendPayoutPercentage, props.scoringRules.dividendPayoutPercentage);
+                                    const dividendYieldPercentageScore = getScore(stock.dividendYieldPercentage, props.scoringRules.dividendYieldPercentage);
                                     const stockPercentageScore = getScore(stock.stockPercentage, props.scoringRules.stockPercentage);
                                     const sectorPercentageScore = getScore(stock.sectorPercentage, props.scoringRules.sectorPercentage);
                                     const industryPercentageScore = getScore(stock.industryPercentage, props.scoringRules.industryPercentage);
+                                    let score = 0
+                                    // Do not get an overall score unless we have earningsPerShare, as it is needed to calculate many of the important metrics
+                                    if(stock.earningsPerShare) {
+                                        score = summaryScore+priceEarningsRatioScore+dividendPayoutPercentageScore+dividendYieldPercentageScore+stockPercentageScore+sectorPercentageScore+industryPercentageScore;
+                                    }
                                     return (
                                         <tr key={index}>
                                             <td>{stock.symbol}</td>
-                                            <td className={stock.score > 4 ? 'good-background' : stock.score < 0  ? 'bad-background' : null}>{stock.score}</td>
+                                            <td className={score > props.scoringRules.overallScore.max ? 'good-background' : score < props.scoringRules.overallScore.min ? 'bad-background' : null}>{score}</td>
                                             <td>{stock.description}</td>
                                             <td>{stock.sector ? stock.sector.replace(/["]/g, '') : null}</td>
                                             <td>{stock.industry ? stock.industry.replace(/["]/g, '') : null}</td>
@@ -144,8 +149,8 @@ const StockChart = (props) => {
                                             <td>{stock.currentValue ? `$${stock.currentValue.toFixed(2)}` : null}</td>
                                             <td className={summaryScore > 0 ? 'good-background' : summaryScore < 0  ? 'bad-background' : null}>{stock.summaryScore}</td>
                                             <td className={priceEarningsRatioScore > 0 ? 'good-background' : priceEarningsRatioScore < 0  ? 'bad-background' : null}>{stock.priceEarningsRatio ? stock.priceEarningsRatio.toFixed(2) : null}</td>
-                                            <td className={dividendPriceRatioScore > 0 ? 'good-background' : dividendPriceRatioScore < 0  ? 'bad-background' : null}>{stock.dividendPriceRatio ? (stock.dividendPriceRatio*100).toFixed(2) : null}</td>
-                                            <td className={dividendEarningsRatioScore > 0 ? 'good-background' : dividendEarningsRatioScore < 0  ? 'bad-background' : null}>{stock.dividendEarningsRatio ? (stock.dividendEarningsRatio*100).toFixed(0) : null}</td>
+                                            <td className={dividendPayoutPercentageScore > 0 ? 'good-background' : dividendPayoutPercentageScore < 0 ? 'bad-background' : null}>{stock.dividendPayoutPercentage ? (stock.dividendPayoutPercentage*100).toFixed(0) : null}</td>
+                                            <td className={dividendYieldPercentageScore > 0 ? 'good-background' : dividendYieldPercentageScore < 0 ? 'bad-background' : null}>{stock.dividendYieldPercentage ? (stock.dividendYieldPercentage*100).toFixed(2) : null}</td>
                                             <td className={stockPercentageScore > 0 ? 'good-background' : stockPercentageScore < 0  ? 'bad-background' : null}>{stock.stockPercentage ? (stock.stockPercentage*100).toFixed(2) : null}</td>
                                             <td className={sectorPercentageScore > 0 ? 'good-background' : sectorPercentageScore < 0  ? 'bad-background' : null}>{stock.sectorPercentage ? (stock.sectorPercentage*100).toFixed(2) : null}</td>
                                             <td className={industryPercentageScore > 0 ? 'good-background' : industryPercentageScore < 0  ? 'bad-background' : null}>{stock.industryPercentage ? (stock.industryPercentage*100).toFixed(2) : null}</td>

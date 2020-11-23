@@ -21,13 +21,14 @@ if(scoringRulesJson) {
     initialScoringRules = utilities.jsonParseNumbers(scoringRulesJson);
 } else {
     initialScoringRules = {
-        dividendEarningsRatio: { highValueBetter: true, min: 0.015, max: 0.3, weight: 2 },
-        dividendPriceRatio: { highValueBetter: false, min: 0.35, max: 0.5, weight: 2 },
+        dividendPayoutPercentage: { highValueBetter: false, min: 0.35, max: 0.6, weight: 2 },
+        dividendYieldPercentage: { highValueBetter: true, min: 0.015, max: 0.025, weight: 1 },
         industryPercentage: { highValueBetter: false, min: 0.002, max: 0.008, weight: 1 },
+        overallScore: { highValueBetter: true, min: 0, max: 3 }, // Summation of all the other scores with min/max used only for highlighting chart
         priceEarningsRatio: { highValueBetter: false, min: 16, max: 25, weight: 2 },
         sectorPercentage: { highValueBetter: false, min: 0.02, max: 0.04, weight: 1 },
         stockPercentage: { highValueBetter: false, min: 0.002, max: 0.005, weight: 1 },
-        summaryScore: { weight: 2 } // Neutral will be 0 and each rating above adds 'weight' and below subtracts 'weight'
+        summaryScore: { weight: 1 } // Neutral will be 0 and each rating above adds 'weight' and below subtracts 'weight'
     };
 }
 

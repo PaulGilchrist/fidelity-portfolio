@@ -44,16 +44,16 @@ const App = () => {
 
     const getStockScore = (stock) => {
         let score = 0;
-        // Only give a score when all relavent data exists
+        // Do not get an overall score unless we have earningsPerShare, as it is needed to calculate many of the important metrics
         if(stock.earningsPerShare) {
-            score += getScore(stock.dividendEarningsRatio, scoringRules.dividendEarningsRatio);
-            score += getScore(stock.dividendPriceRatio, scoringRules.dividendPriceRatio);
+            score += getScore(stock.dividendPayoutPercentage, scoringRules.dividendPayoutPercentage);
+            score += getScore(stock.dividendYieldPercentage, scoringRules.dividendYieldPercentage);
             score += getScore(stock.industryPercentage, scoringRules.industryPercentage);
             score += getScore(stock.priceEarningsRatio, scoringRules.priceEarningsRatio);
             score += getScore(stock.sectorPercentage, scoringRules.sectorPercentage);
             score += getScore(stock.stockPercentage, scoringRules.stockPercentage);
             // Summary Score is a special rule
-            getSummaryScore(stock);
+            score += getSummaryScore(stock);
         }
         return score;
     }
@@ -177,7 +177,6 @@ const App = () => {
                 stock.sectorPercentage = sector.currentValue / portfolio.currentValue;
                 stock.industryPercentage = industry.currentValue / portfolio.currentValue;
             }
-            stock.score = getStockScore(stock);
         }
         dispatch(updatePortfolio(portfolio));
     }
@@ -200,9 +199,8 @@ const App = () => {
                 stock.summaryScore = columns[7];
                 // Calculated fields
                 stock.priceEarningsRatio = stock.lastPrice / stock.earningsPerShare;
-                stock.dividendEarningsRatio = stock.dividendPerShare * 4 / stock.earningsPerShare;
-                stock.dividendPriceRatio = stock.dividendPerShare * 4 / stock.lastPrice;
-                stock.score = getStockScore(stock);
+                stock.dividendPayoutPercentage = stock.dividendPerShare * 4 / stock.earningsPerShare;
+                stock.dividendYieldPercentage = stock.dividendPerShare * 4 / stock.lastPrice;
             }
         }
         dispatch(updatePortfolio(portfolio));
@@ -257,10 +255,11 @@ const App = () => {
 
     // Event Handlers
     const handleDataExport = (event) => {
-        let csv = 'Symbol,Score,Description,Sector,Industry,Last Price,Quantity,EPS,Dividend,Cost Basis,Current Value,Summary Score,P/E,D/P,D/E,Stock %,Sector %,Industry %\n';
+        let csv = 'Symbol,Score,Description,Sector,Industry,Last Price,Quantity,EPS,Dividend,Cost Basis,Current Value,Summary Score,P/E,Dividend Payout %,Dividend Yield %,Stock %,Sector %,Industry %\n';
         // Add each row of the table
         for (const stock of portfolio.stocks) {
-            csv += `${stock.symbol},${stock.score},${stock.description},${stock.sector || ''},${stock.industry || ''},${forcePrecision(stock.lastPrice)},${forcePrecision(stock.quantity)},${forcePrecision(stock.earningsPerShare)},${forcePrecision(stock.dividendPerShare)},${forcePrecision(stock.costBasis)},${forcePrecision(stock.currentValue)},${stock.summaryScore || ''},${forcePrecision(stock.priceEarningsRatio)},${forcePrecision(stock.dividendEarningsRatio)},${forcePrecision(stock.dividendPriceRatio, 4)},${forcePrecision(stock.stockPercentage, 4)},${forcePrecision(stock.sectorPercentage, 4)},${forcePrecision(stock.industryPercentage, 4)}\n`;
+            let score = getStockScore(stock);
+            csv += `${stock.symbol},${score},${stock.description},${stock.sector || ''},${stock.industry || ''},${forcePrecision(stock.lastPrice)},${forcePrecision(stock.quantity)},${forcePrecision(stock.earningsPerShare)},${forcePrecision(stock.dividendPerShare)},${forcePrecision(stock.costBasis)},${forcePrecision(stock.currentValue)},${stock.summaryScore || ''},${forcePrecision(stock.priceEarningsRatio)},${forcePrecision(stock.dividendPayoutPercentage)},${forcePrecision(stock.dividendYieldPercentage, 4)},${forcePrecision(stock.stockPercentage, 4)},${forcePrecision(stock.sectorPercentage, 4)},${forcePrecision(stock.industryPercentage, 4)}\n`;
         }
         const blob = new Blob([csv], { type: 'text/plain' });
         const href = URL.createObjectURL(blob);
