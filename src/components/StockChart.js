@@ -132,23 +132,23 @@ const StockChart = (props) => {
                                     return (
                                         <tr key={index}>
                                             <td>{stock.symbol}</td>
-                                            <td className={stock.score > 0 ? 'good' : stock.score < 0  ? 'bad' : null}>{stock.score}</td>
+                                            <td className={stock.score > 4 ? 'good-background' : stock.score < 0  ? 'bad-background' : null}>{stock.score}</td>
                                             <td>{stock.description}</td>
-                                            <td>{stock.sector}</td>
-                                            <td>{stock.industry}</td>
+                                            <td>{stock.sector ? stock.sector.replace(/["]/g, '') : null}</td>
+                                            <td>{stock.industry ? stock.industry.replace(/["]/g, '') : null}</td>
                                             <td>${stock.lastPrice.toFixed(2)}</td>
                                             <td>{stock.quantity}</td>
                                             <td>{stock.earningsPerShare ? `$${stock.earningsPerShare.toFixed(2)}` : null}</td>
                                             <td>{stock.dividendPerShare ? `$${stock.dividendPerShare.toFixed(2)}` : null}</td>
                                             <td>{stock.costBasis ? `$${stock.costBasis.toFixed(2)}` : null}</td>
                                             <td>{stock.currentValue ? `$${stock.currentValue.toFixed(2)}` : null}</td>
-                                            <td className={summaryScore > 0 ? 'good' : summaryScore < 0  ? 'bad' : null}>{stock.summaryScore}</td>
-                                            <td className={priceEarningsRatioScore > 0 ? 'good' : priceEarningsRatioScore < 0  ? 'bad' : null}>{stock.priceEarningsRatio ? stock.priceEarningsRatio.toFixed(2) : null}</td>
-                                            <td className={dividendPriceRatioScore > 0 ? 'good' : dividendPriceRatioScore < 0  ? 'bad' : null}>{stock.dividendPriceRatio ? (stock.dividendPriceRatio*100).toFixed(2) : null}</td>
-                                            <td className={dividendEarningsRatioScore > 0 ? 'good' : dividendEarningsRatioScore < 0  ? 'bad' : null}>{stock.dividendEarningsRatio ? (stock.dividendEarningsRatio*100).toFixed(0) : null}</td>
-                                            <td className={stockPercentageScore > 0 ? 'good' : stockPercentageScore < 0  ? 'bad' : null}>{stock.stockPercentage ? (stock.stockPercentage*100).toFixed(2) : null}</td>
-                                            <td className={sectorPercentageScore > 0 ? 'good' : sectorPercentageScore < 0  ? 'bad' : null}>{stock.sectorPercentage ? (stock.sectorPercentage*100).toFixed(2) : null}</td>
-                                            <td className={industryPercentageScore > 0 ? 'good' : industryPercentageScore < 0  ? 'bad' : null}>{stock.industryPercentage ? (stock.industryPercentage*100).toFixed(2) : null}</td>
+                                            <td className={summaryScore > 0 ? 'good-background' : summaryScore < 0  ? 'bad-background' : null}>{stock.summaryScore}</td>
+                                            <td className={priceEarningsRatioScore > 0 ? 'good-background' : priceEarningsRatioScore < 0  ? 'bad-background' : null}>{stock.priceEarningsRatio ? stock.priceEarningsRatio.toFixed(2) : null}</td>
+                                            <td className={dividendPriceRatioScore > 0 ? 'good-background' : dividendPriceRatioScore < 0  ? 'bad-background' : null}>{stock.dividendPriceRatio ? (stock.dividendPriceRatio*100).toFixed(2) : null}</td>
+                                            <td className={dividendEarningsRatioScore > 0 ? 'good-background' : dividendEarningsRatioScore < 0  ? 'bad-background' : null}>{stock.dividendEarningsRatio ? (stock.dividendEarningsRatio*100).toFixed(0) : null}</td>
+                                            <td className={stockPercentageScore > 0 ? 'good-background' : stockPercentageScore < 0  ? 'bad-background' : null}>{stock.stockPercentage ? (stock.stockPercentage*100).toFixed(2) : null}</td>
+                                            <td className={sectorPercentageScore > 0 ? 'good-background' : sectorPercentageScore < 0  ? 'bad-background' : null}>{stock.sectorPercentage ? (stock.sectorPercentage*100).toFixed(2) : null}</td>
+                                            <td className={industryPercentageScore > 0 ? 'good-background' : industryPercentageScore < 0  ? 'bad-background' : null}>{stock.industryPercentage ? (stock.industryPercentage*100).toFixed(2) : null}</td>
                                         </tr>
                                     )
                                 })}
@@ -156,9 +156,9 @@ const StockChart = (props) => {
                         </table>
                     </div>
                 </div>
-                <div className="card-footer text-light d-flex p-2 justify-content-around">
-                    <span className="text-warning">Orange denotes a negative score</span>
-                    <span className="text-danger">Blue denotes a positive score</span>
+                <div className="card-footer d-flex p-2 justify-content-around">
+                    <span className="bad-text">Orange denotes a negative score</span>
+                    <span className="good-text">Blue denotes a positive score</span>
                 </div>
             </div>
         </div>

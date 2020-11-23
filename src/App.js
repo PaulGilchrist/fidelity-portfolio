@@ -133,8 +133,8 @@ const App = () => {
             let stock = portfolio.stocks.find(s => s.symbol === symbol);
             if (stock) {
                 // Only get important columns
-                stock.sector = columns[7].replace(/["]/g, '');
-                stock.industry = columns[8].replace(/["]/g, '');
+                stock.sector = columns[7];
+                stock.industry = columns[8];
                 // Get sector and industry summations
                 let sector = portfolio.sectors.find(s => s.name === stock.sector);
                 if (sector) {

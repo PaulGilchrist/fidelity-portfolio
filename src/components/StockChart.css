@@ -1,8 +1,14 @@
-.good {
+.good-background {
     background-color: lightblue;
 }
-.bad {
+.bad-background {
     background-color: lightsalmon
+}
+.good-text {
+    color: lightblue;
+}
+.bad-text {
+    color: lightsalmon
 }
 .stock-chart .card-body {
 	padding: 5px
@@ -15,7 +21,7 @@
     width: 100%;
 }
 .stock-chart .card-footer {
-	background-color: rgb(227, 229, 237);
+	background-color: #2f2f2f;
 }
 .stock-chart .font-size-small {
 	font-size: 0.7em;
