@@ -3,3 +3,9 @@
     text-align: center;
     width: 100%;
 }
+.good {
+    background-color: lightblue;
+}
+.bad {
+    background-color: lightsalmon
+}
