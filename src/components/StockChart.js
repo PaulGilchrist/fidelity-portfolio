@@ -8,18 +8,23 @@ const StockChart = (props) => {
     let [descendingSort, setDecendingSort] = useState(true);
 
     const getScore = (value, rule) => {
+        let score = 0;
         if(value) {
             if (value > rule.max) {
-                if (rule.highValueBetter)
-                    return rule.weight;
-                return -rule.weight;
+                if (rule.highValueBetter) {
+                    score = rule.weight;
+                } else {
+                    score = -rule.weight;
+                }
             } else if (value < rule.min) {
-                if (rule.highValueBetter)
-                    return -rule.weight;
-                return rule.weight;
+                if (rule.highValueBetter) {
+                    score = -rule.weight;
+                } else {
+                    score = rule.weight;
+                }
             }
         }
-        return 0;
+        return score;
     }
 
     const getSummaryScore = (stock) => {

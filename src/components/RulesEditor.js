@@ -10,15 +10,15 @@ const RulesEditor = (props) => {
     const handleFormSubmit = (values) => {
         // Values are the actual form fields that use ref={register()}
         const scoringRules = {
-            dividendPayoutPercentage: { highValueBetter: values.dividendPayoutPercentageHighValueBetter, min: Number(values.dividendPayoutPercentageMin), max: Number(values.dividendPayoutPercentageMax), weight: Number(values.dividendPayoutPercentageWeight) },
-            dividendYieldPercentage: { highValueBetter: values.dividendYieldPercentageHighValueBetter, min: Number(values.dividendYieldPercentageMin), max: Number(values.dividendYieldPercentageMax), weight: Number(values.dividendYieldPercentageWeight) },
-            industryPercentage: { highValueBetter: values.industryPercentageHighValueBetter, min: Number(values.industryPercentageMin), max: Number(values.industryPercentageMax), weight: Number(values.industryPercentageWeight) },
+            dividendPayoutPercentage: { highValueBetter: values.dividendPayoutPercentageHighValueBetter === 'true', min: Number(values.dividendPayoutPercentageMin), max: Number(values.dividendPayoutPercentageMax), weight: Number(values.dividendPayoutPercentageWeight) },
+            dividendYieldPercentage: { highValueBetter: values.dividendYieldPercentageHighValueBetter === 'true', min: Number(values.dividendYieldPercentageMin), max: Number(values.dividendYieldPercentageMax), weight: Number(values.dividendYieldPercentageWeight) },
+            industryPercentage: { highValueBetter: values.industryPercentageHighValueBetter === 'true', min: Number(values.industryPercentageMin), max: Number(values.industryPercentageMax), weight: Number(values.industryPercentageWeight) },
             overallScore: { highValueBetter: true, min: Number(values.overallScoreMin), max: Number(values.overallScoreMax) }, // Summation of all the other scores with min/max used only for highlighting chart
-            priceEarningsRatio: { highValueBetter: values.priceEarningsRatioHighValueBetter, min: Number(values.priceEarningsRatioMin), max: Number(values.priceEarningsRatioMax), weight: Number(values.priceEarningsRatioWeight) },
-            sectorPercentage: { highValueBetter: values.sectorPercentageHighValueBetter, min: Number(values.sectorPercentageMin), max: Number(values.sectorPercentageMax), weight: Number(values.sectorPercentageWeight) },
-            stockPercentage: { highValueBetter: values.stockPercentageHighValueBetter, min: Number(values.stockPercentageMin), max: Number(values.stockPercentageMax), weight: Number(values.stockPercentageWeight) },
+            priceEarningsRatio: { highValueBetter: values.priceEarningsRatioHighValueBetter === 'true', min: Number(values.priceEarningsRatioMin), max: Number(values.priceEarningsRatioMax), weight: Number(values.priceEarningsRatioWeight) },
+            sectorPercentage: { highValueBetter: values.sectorPercentageHighValueBetter === 'true', min: Number(values.sectorPercentageMin), max: Number(values.sectorPercentageMax), weight: Number(values.sectorPercentageWeight) },
+            stockPercentage: { highValueBetter: values.stockPercentageHighValueBetter === 'true', min: Number(values.stockPercentageMin), max: Number(values.stockPercentageMax), weight: Number(values.stockPercentageWeight) },
             summaryScore: { weight: Number(values.summaryScoreWeight) } // Neutral will be 0 and each rating above adds 'weight' and below subtracts 'weight'
-        }        
+        }
         props.onSubmit(scoringRules);
     }
 
