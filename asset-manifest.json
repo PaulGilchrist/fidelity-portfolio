@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/fidelity-portfolio/static/css/main.7660d419.chunk.css",
+    "main.js": "/fidelity-portfolio/static/js/main.d4a0032f.chunk.js",
+    "main.js.map": "/fidelity-portfolio/static/js/main.d4a0032f.chunk.js.map",
+    "runtime-main.js": "/fidelity-portfolio/static/js/runtime-main.9ddbd884.js",
+    "runtime-main.js.map": "/fidelity-portfolio/static/js/runtime-main.9ddbd884.js.map",
+    "static/css/2.a75d72ee.chunk.css": "/fidelity-portfolio/static/css/2.a75d72ee.chunk.css",
+    "static/js/2.49e82567.chunk.js": "/fidelity-portfolio/static/js/2.49e82567.chunk.js",
+    "static/js/2.49e82567.chunk.js.map": "/fidelity-portfolio/static/js/2.49e82567.chunk.js.map",
+    "static/js/3.200abbdf.chunk.js": "/fidelity-portfolio/static/js/3.200abbdf.chunk.js",
+    "static/js/3.200abbdf.chunk.js.map": "/fidelity-portfolio/static/js/3.200abbdf.chunk.js.map",
+    "index.html": "/fidelity-portfolio/index.html",
+    "static/css/2.a75d72ee.chunk.css.map": "/fidelity-portfolio/static/css/2.a75d72ee.chunk.css.map",
+    "static/css/main.7660d419.chunk.css.map": "/fidelity-portfolio/static/css/main.7660d419.chunk.css.map",
+    "static/js/2.49e82567.chunk.js.LICENSE.txt": "/fidelity-portfolio/static/js/2.49e82567.chunk.js.LICENSE.txt",
+    "static/media/font-awesome.min.css": "/fidelity-portfolio/static/media/fontawesome-webfont.f691f37e.woff"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.9ddbd884.js",
+    "static/css/2.a75d72ee.chunk.css",
+    "static/js/2.49e82567.chunk.js",
+    "static/css/main.7660d419.chunk.css",
+    "static/js/main.d4a0032f.chunk.js"
+  ]
+}
