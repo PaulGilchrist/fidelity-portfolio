@@ -320,7 +320,7 @@ const App = () => {
         reader.readAsText(event.target.files[0]);
     }
 
-    const handleOnPrintStockChart = () => {
+    const handleOnRules = () => {
         // Not Implemented Yet
     }
 
@@ -338,7 +338,7 @@ const App = () => {
                 <label className="btn btn-info" onClick={handleDataExport}>Export</label>
             </div>
             <div className="d-flex flex-fill justify-content-center">
-                {portfolio.stocks.length > 0 ? <StockChart portfolio={portfolio} scoringRules={scoringRules} onPrintChart={() => handleOnPrintStockChart()}/> : null}
+                {portfolio.stocks.length > 0 ? <StockChart portfolio={portfolio} scoringRules={scoringRules} onRules={() => handleOnRules()}/> : null}
             </div>
         </div>
     );

@@ -1,56 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
+import { utilities } from './../utilities';
+
 import './StockChart.css'
 
 const StockChart = (props) => {
-    /*
-    props = {
-        portfolio = {
-            currentValue: number,
-            sectors: [
-                {
-                    name: string,
-                    currentValue: number,
-                    industries: [
-                        {
-                            name: string,
-                            currentValue: number
-                        }
-                    ]
-                }
-            ],
-            scoringRules: {
-                dividendPayoutPercentage: { highValueBetter: boolean, min: number, max: number, weight: number },
-                dividendYieldPercentage { highValueBetter: boolean, min: number, max: number, weight: number },
-                industryPercentage: { highValueBetter: boolean, min: number, max: number, weight: number },
-                priceEarningsRatio: { highValueBetter: boolean, min: number, max: number, weight: number },
-                sectorPercentage: { highValueBetter: boolean, min: number, max: number, weight: number },
-                stockPercentage: { highValueBetter: boolean, min: number, max: number, weight: number },
-                summaryScore: { weight: number }, // Neutral will be 0 and each rating above adds 'weight' and below subtracts 'weight'
-            },
-            stocks: [
-                {
-                    costBasis: number,
-                    currentValue: number,
-                    description: string
-                    dividendPerShare: number,
-                    dividendRatio: number,
-                    dividendYieldPercent: number,
-                    earningsPerShare: number,
-                    industry: string,
-                    industryPercentage: number,
-                    lastPrice: number,
-                    priceEarningsRatio: number,
-                    quantity: number,
-                    score: number,
-                    sector: string,
-                    sectorPercentage: number,
-                    stockPercentage: number,
-                    summaryScore: string,
-                    symbol: string
-                }
-            ]
-        }
-    */
+
+    let [descendingSort, setDecendingSort] = useState(true);
 
     const getScore = (value, rule) => {
         if(value) {
@@ -88,36 +43,41 @@ const StockChart = (props) => {
         return score;
     }
     
+    const handleSort = (propertyName) => {
+        setDecendingSort(!descendingSort);
+        utilities.sort(props.portfolio.stocks, propertyName, descendingSort);
+    }
+
     return (
         <div className="stock-chart">
             <div className="card" id="chart">
                 <div className="card-heading bg-dark text-light">
                     <span>Stock Portfolio</span>
-                    <button className='btn btn-secondary' onClick={props.onPrintChart}> Print</button>
+                    <button className='btn btn-secondary' onClick={props.onRules}> Print</button>
                 </div>
                 <div className="card-body">
                     <div className="table-responsive">
                         <table id="stockTable" className="table table-condensed table-striped table-hover font-size-small">
                             <thead>
                                 <tr>
-                                    <th>Symbol<br/></th>
-                                    <th>Score<br/></th>
-                                    <th>Description<br/></th>
-                                    <th>Sector<br/></th>
-                                    <th>Industry<br/></th>
-                                    <th>Last Price<br/></th>
-                                    <th>Quantity<br/></th>
-                                    <th>EPS<br/></th>
-                                    <th>Dividend<br/></th>
-                                    <th>Cost Basis<br/></th>
-                                    <th>Current Value<br/></th>
-                                    <th>Summary Score<br/></th>
-                                    <th>P/E<br/></th>
-                                    <th>Div Payout %<br/></th>
-                                    <th>Div Yield %<br/></th>
-                                    <th>Stock %<br/></th>
-                                    <th>Sector %<br/></th>
-                                    <th>Industry %<br/></th>
+                                    <th onClick={() => handleSort('symbol')}>Symbol</th>
+                                    <th onClick={() => handleSort('score')}>Score</th>
+                                    <th onClick={() => handleSort('description')}>Description</th>
+                                    <th onClick={() => handleSort('sector')}>Sector</th>
+                                    <th onClick={() => handleSort('industry')}>Industry</th>
+                                    <th onClick={() => handleSort('lastPrice')}>Last Price</th>
+                                    <th onClick={() => handleSort('quantity')}>Quantity</th>
+                                    <th onClick={() => handleSort('earningsPerShare')}>EPS</th>
+                                    <th onClick={() => handleSort('dividendPerShare')}>Dividend</th>
+                                    <th onClick={() => handleSort('costBasis')}>Cost Basis</th>
+                                    <th onClick={() => handleSort('currentValue')}>Current Value</th>
+                                    <th onClick={() => handleSort('summaryScore')}>Summary Score</th>
+                                    <th onClick={() => handleSort('priceEarningsRatio')}>P/E</th>
+                                    <th onClick={() => handleSort('dividendPayoutPercentage')}>Div Payout %</th>
+                                    <th onClick={() => handleSort('dividendYieldPercentage')}>Div Yield %</th>
+                                    <th onClick={() => handleSort('stockPercentage')}>Stock %</th>
+                                    <th onClick={() => handleSort('sectorPercentage')}>Sector %</th>
+                                    <th onClick={() => handleSort('industryPercentage')}>Industry %</th>
                                 </tr>
                             </thead>
                             <tbody>

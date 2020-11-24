@@ -25,6 +25,9 @@ export let utilities = {
 		});
 	},
     isDate: (value) => {
+        if(!value) {
+            return false;
+        }
         var dateFormat;
         if (toString.call(value) === '[object Date]') {
             return true;
@@ -51,7 +54,7 @@ export let utilities = {
                 let aValue = a[propertyName];
                 let bValue = b[propertyName];
                 // Check if strings are actually dates
-                if(this.isDate(aValue) && this.isDate(bValue)) {
+                if(utilities.isDate(aValue) && utilities.isDate(bValue)) {
                     aValue = new Date(a[propertyName]);
                     bValue = new Date(b[propertyName]);
                 }
