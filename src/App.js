@@ -325,8 +325,9 @@ const App = () => {
         setShowRules(!showRules);
     }
 
-    const handleOnUpdateRules = () => {
-        // Not Implemented Yet
+    const handleOnUpdateRules = (values) => {
+        dispatch(updateScoringRules(values));
+        setShowRules(false);
     }
 
     const dispatch = useDispatch();
@@ -342,7 +343,7 @@ const App = () => {
                 &nbsp;
                 <label className="btn btn-info" onClick={handleDataExport}>Export</label>
             </div>
-            {showRules ? <RulesEditor scoringRules={scoringRules} onSubmit={() => handleOnUpdateRules()}/> : null}
+            {showRules ? <RulesEditor scoringRules={scoringRules} onSubmit={(values) => handleOnUpdateRules(values)}/> : null}
             {portfolio.stocks.length > 0 ? <StockChart portfolio={portfolio} scoringRules={scoringRules} onRules={() => handleOnRules()}/> : null}
         </div>
     );
