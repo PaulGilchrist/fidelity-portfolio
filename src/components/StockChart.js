@@ -52,8 +52,8 @@ const StockChart = (props) => {
         <div className="stock-chart">
             <div className="card" id="chart">
                 <div className="card-heading bg-dark text-light">
+                    <button className='btn btn-secondary btn-rules' onClick={props.onRules}> Rules</button>
                     <span>Stock Portfolio</span>
-                    <button className='btn btn-secondary' onClick={props.onRules}> Print</button>
                 </div>
                 <div className="card-body">
                     <div className="table-responsive">

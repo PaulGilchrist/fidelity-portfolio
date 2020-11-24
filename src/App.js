@@ -1,14 +1,15 @@
 import React, {useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { cloneDeep } from 'lodash'
-
 import { toast } from 'react-toastify' // Must be initialized in App.js (see https://github.com/fkhadra/react-toastify#usage)
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
 import 'react-toastify/dist/ReactToastify.min.css';
-
 import css from './app.module.css';
+
+import RulesEditor from './components/RulesEditor';
+import StockChart from './components/StockChart';
 
 import {
     // Actions
@@ -19,9 +20,9 @@ import {
     selectorScoringRules
 } from './appSlice';
 
-import StockChart from './components/StockChart';
-
 const App = () => {
+    let [showRules, setShowRules] = useState(false);
+
     // Call it once in your app. At the root of your app is the best place
     toast.configure();
 
@@ -321,6 +322,10 @@ const App = () => {
     }
 
     const handleOnRules = () => {
+        setShowRules(!showRules);
+    }
+
+    const handleOnUpdateRules = () => {
         // Not Implemented Yet
     }
 
@@ -337,9 +342,8 @@ const App = () => {
                 &nbsp;
                 <label className="btn btn-info" onClick={handleDataExport}>Export</label>
             </div>
-            <div className="d-flex flex-fill justify-content-center">
-                {portfolio.stocks.length > 0 ? <StockChart portfolio={portfolio} scoringRules={scoringRules} onRules={() => handleOnRules()}/> : null}
-            </div>
+            {showRules ? <RulesEditor scoringRules={scoringRules} onSubmit={() => handleOnUpdateRules()}/> : null}
+            {portfolio.stocks.length > 0 ? <StockChart portfolio={portfolio} scoringRules={scoringRules} onRules={() => handleOnRules()}/> : null}
         </div>
     );
 }
