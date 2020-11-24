@@ -30,10 +30,11 @@
         "url": "https://github.com/PaulGilchrist/fidelity-portfolio.git"
     },
     "scripts": {
-        "start": "react-scripts start",
         "build": "react-scripts build",
-        "test": "react-scripts test",
-        "eject": "react-scripts eject"
+        "deploy": "gh-pages -d build",
+        "predeploy": "npm run build",
+        "start": "react-scripts start",
+        "test": "react-scripts test"
     },
     "version": "1.0.0",
     "dependencies": {
