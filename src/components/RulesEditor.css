@@ -5,6 +5,9 @@
     margin: 0 auto;
     padding: 10px;
 }
+.rules-editor .form-buttons {
+    text-align: right;
+}    
 .rules-editor .name-column {
     width: 240px;
 } 

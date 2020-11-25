@@ -29,7 +29,18 @@ const RulesEditor = (props) => {
                     Rules Editor
                 </div>
                 <div className="card-body">
-                    The stock portfolio table will highlight cells below the minimum or above the maximum values enmtered here, scoring them based on the weight given. Scoring will be positive 'Weight' value if the direction is set to 'High' and above 'Max', or negative if below the 'Min'.  Scoring will be negative 'Weight' value if the direction is set to 'Low' and above the 'Max', or positive if below the 'Min'.<br/>
+                    The stock portfolio table will highlight cells below the minimum or above the maximum values entered here, scoring them based on the weight given. Direction impacts the score as follows:<br/>
+                    <br/>
+                    <b>High</b>
+                    <ul>
+                        <li>Weight added to score when value &gt; Max</li>
+                        <li>Weight removed from score when value &lt; Min</li>
+                    </ul>
+                    <b>Low</b>
+                    <ul>
+                        <li>Weight added to score when value &lt; Min</li>
+                        <li>Weight removed from score when value &gt; Max</li>
+                    </ul>                  
                     <br/>
                     <form onSubmit={handleSubmit(handleFormSubmit)}>
                         <table id="stockTable" className="table table-condensed table-striped table-hover font-size-small">
@@ -133,7 +144,10 @@ const RulesEditor = (props) => {
                                 </tr>
                             </tbody>
                         </table>
-                        <button className="btn btn-success" type="submit"><span className="fa fa-check"></span> Save</button>&nbsp;
+                        <div className="form-buttons">
+                            <button className="btn btn-success" type="submit"><span className="fa fa-check"></span> Save</button>&nbsp;
+                            <button className="btn btn-warning" onClick={props.onClose}> Cancel</button>&nbsp;
+                        </div>
                     </form>
                 </div>
             </div>

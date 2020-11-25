@@ -257,6 +257,10 @@ const App = () => {
     }
 
     // Event Handlers
+    const handleOnCloseRulesEditor = (event) => {
+        setShowRules(false);
+    }
+
     const handleDataExport = (event) => {
         let csv = 'Symbol,Score,Description,Sector,Industry,Last Price,Quantity,EPS,Dividend,Cost Basis,Current Value,Summary Score,P/E,Dividend Payout %,Dividend Yield %,Stock %,Sector %,Industry %\n';
         // Add each row of the table
@@ -355,7 +359,7 @@ const App = () => {
                 <label className="btn btn-info" onClick={handleDataExport}>Export</label>
             </div>
             <GettingStarted stocks={portfolio.stocks}/>
-            {showRules ? <RulesEditor scoringRules={scoringRules} onSubmit={(values) => handleOnUpdateRules(values)}/> : null}
+            {showRules ? <RulesEditor scoringRules={scoringRules} onClose={handleOnCloseRulesEditor} onSubmit={(values) => handleOnUpdateRules(values)}/> : null}
             {portfolio.stocks.length > 0 ? <StockChart portfolio={portfolio} scoringRules={scoringRules} onRules={() => handleOnRules()}/> : null}
         </div>
     );
