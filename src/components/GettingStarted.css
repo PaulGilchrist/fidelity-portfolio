@@ -1,0 +1,8 @@
+.getting-started {
+    display: grid;
+    font-size: 1.1em;
+    grid-template-columns: 1200px;
+    justify-items: center;
+    padding-bottom: 20px;
+    text-align: left;
+}

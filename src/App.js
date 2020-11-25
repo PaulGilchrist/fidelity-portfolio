@@ -8,6 +8,7 @@ import 'font-awesome/css/font-awesome.min.css';
 import 'react-toastify/dist/ReactToastify.min.css';
 import css from './app.module.css';
 
+import GettingStarted from './components/GettingStarted';
 import RulesEditor from './components/RulesEditor';
 import StockChart from './components/StockChart';
 
@@ -134,8 +135,12 @@ const App = () => {
             let stock = portfolio.stocks.find(s => s.symbol === symbol);
             if (stock) {
                 // Only get important columns
+                stock.dividendPerShare = (Number(columns[5].replace(/[$%",]/g, '')) * stock.lastPrice / 400); // dividendYield * lastPrice / 4 (quarterly payments)
                 stock.sector = columns[7];
                 stock.industry = columns[8];
+                // Calculated fields
+                stock.dividendPayoutPercentage = stock.dividendPerShare * 4 / stock.earningsPerShare;
+                stock.dividendYieldPercentage = stock.dividendPerShare * 4 / stock.lastPrice;
                 // Get sector and industry summations
                 let sector = portfolio.sectors.find(s => s.name === stock.sector);
                 if (sector) {
@@ -195,13 +200,10 @@ const App = () => {
             let stock = portfolio.stocks.find(s => s.symbol === symbol);
             if (stock) {
                 // Only get important columns
-                stock.earningsPerShare = stock.lastPrice / Number(columns[5].replace(/[$%",]/g, '')); // lastPrice / PriceEarningsRatio
-                stock.dividendPerShare = (Number(columns[4].replace(/[$%",]/g, '')) * stock.lastPrice / 400); // dividendYield * lastPrice / 4 (quarterly payments)
-                stock.summaryScore = columns[7];
+                stock.earningsPerShare = stock.lastPrice / Number(columns[4].replace(/[$%",]/g, '')); // lastPrice / PriceEarningsRatio
+                stock.summaryScore = columns[5];
                 // Calculated fields
                 stock.priceEarningsRatio = stock.lastPrice / stock.earningsPerShare;
-                stock.dividendPayoutPercentage = stock.dividendPerShare * 4 / stock.earningsPerShare;
-                stock.dividendYieldPercentage = stock.dividendPerShare * 4 / stock.lastPrice;
             }
         }
         dispatch(updatePortfolio(portfolio));
@@ -307,6 +309,15 @@ const App = () => {
                     processScreenerResultsSearchCriteria(rows);
                 } else if (rows[0].substring(0, 34) === 'Symbol,Company Name,Security Price') {
                     processScreenerResultsBasicFacts(rows);
+                } else {
+                    toast.warn(`File header not recognized`, {
+                        position: "top-right",
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true
+                    });
                 }
             }
             toast.success(`File imported`, {
@@ -343,6 +354,7 @@ const App = () => {
                 &nbsp;
                 <label className="btn btn-info" onClick={handleDataExport}>Export</label>
             </div>
+            <GettingStarted stocks={portfolio.stocks}/>
             {showRules ? <RulesEditor scoringRules={scoringRules} onSubmit={(values) => handleOnUpdateRules(values)}/> : null}
             {portfolio.stocks.length > 0 ? <StockChart portfolio={portfolio} scoringRules={scoringRules} onRules={() => handleOnRules()}/> : null}
         </div>

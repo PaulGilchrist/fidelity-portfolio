@@ -23,7 +23,7 @@ const RulesEditor = (props) => {
     }
 
     return (
-        <div className="rules-editor ">
+        <div className="rules-editor">
             <div className="card">
                 <div className="card-heading bg-dark text-light d-flex p-2">
                     Rules Editor
