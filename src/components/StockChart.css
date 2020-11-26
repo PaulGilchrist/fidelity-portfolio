@@ -1,14 +1,14 @@
 .good-background {
-    background-color: lightblue;
+    background-color: lightgreen;
 }
 .bad-background {
     background-color: lightsalmon
 }
 .good-text {
-    color: lightblue;
+    color: green;
 }
 .bad-text {
-    color: lightsalmon
+    color: red
 }
 .btn-rules {
     margin-left: 15px;

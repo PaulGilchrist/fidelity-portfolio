@@ -111,7 +111,7 @@ const StockChart = (props) => {
                                             <td>{stock.earningsPerShare ? `$${stock.earningsPerShare.toFixed(2)}` : null}</td>
                                             <td>{stock.dividendPerShare ? `$${stock.dividendPerShare.toFixed(2)}` : null}</td>
                                             <td>{stock.costBasis ? `$${stock.costBasis.toFixed(2)}` : null}</td>
-                                            <td>{stock.currentValue ? `$${stock.currentValue.toFixed(2)}` : null}</td>
+                                            <td className={stock.currentValue < stock.costBasis ? 'bad-text' : null}>{stock.currentValue ? `$${stock.currentValue.toFixed(2)}` : null}</td>
                                             <td className={summaryScore > 0 ? 'good-background' : summaryScore < 0  ? 'bad-background' : null}>{stock.summaryScore}</td>
                                             <td className={priceEarningsRatioScore > 0 ? 'good-background' : priceEarningsRatioScore < 0  ? 'bad-background' : null}>{stock.priceEarningsRatio ? stock.priceEarningsRatio.toFixed(2) : null}</td>
                                             <td className={dividendPayoutPercentageScore > 0 ? 'good-background' : dividendPayoutPercentageScore < 0 ? 'bad-background' : null}>{stock.dividendPayoutPercentage ? (stock.dividendPayoutPercentage*100).toFixed(0) : null}</td>
