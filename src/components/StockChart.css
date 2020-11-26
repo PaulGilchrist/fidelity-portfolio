@@ -1,11 +1,11 @@
 .good-background {
-    background-color: lightgreen;
+    background-color: lightblue;
 }
 .bad-background {
     background-color: lightsalmon
 }
 .good-text {
-    color: green;
+    color: darkgreen;
 }
 .bad-text {
     color: red
