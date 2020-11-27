@@ -1,26 +1,26 @@
 {
   "files": {
     "main.css": "/fidelity-portfolio/static/css/main.fe2bcd96.chunk.css",
-    "main.js": "/fidelity-portfolio/static/js/main.040eda7e.chunk.js",
-    "main.js.map": "/fidelity-portfolio/static/js/main.040eda7e.chunk.js.map",
-    "runtime-main.js": "/fidelity-portfolio/static/js/runtime-main.c6666a1b.js",
-    "runtime-main.js.map": "/fidelity-portfolio/static/js/runtime-main.c6666a1b.js.map",
+    "main.js": "/fidelity-portfolio/static/js/main.2ce54034.chunk.js",
+    "main.js.map": "/fidelity-portfolio/static/js/main.2ce54034.chunk.js.map",
+    "runtime-main.js": "/fidelity-portfolio/static/js/runtime-main.9211d1ee.js",
+    "runtime-main.js.map": "/fidelity-portfolio/static/js/runtime-main.9211d1ee.js.map",
     "static/css/2.a75d72ee.chunk.css": "/fidelity-portfolio/static/css/2.a75d72ee.chunk.css",
-    "static/js/2.56a6324d.chunk.js": "/fidelity-portfolio/static/js/2.56a6324d.chunk.js",
-    "static/js/2.56a6324d.chunk.js.map": "/fidelity-portfolio/static/js/2.56a6324d.chunk.js.map",
-    "static/js/3.f2e21267.chunk.js": "/fidelity-portfolio/static/js/3.f2e21267.chunk.js",
-    "static/js/3.f2e21267.chunk.js.map": "/fidelity-portfolio/static/js/3.f2e21267.chunk.js.map",
+    "static/js/2.678839ba.chunk.js": "/fidelity-portfolio/static/js/2.678839ba.chunk.js",
+    "static/js/2.678839ba.chunk.js.map": "/fidelity-portfolio/static/js/2.678839ba.chunk.js.map",
+    "static/js/3.d7bee8d3.chunk.js": "/fidelity-portfolio/static/js/3.d7bee8d3.chunk.js",
+    "static/js/3.d7bee8d3.chunk.js.map": "/fidelity-portfolio/static/js/3.d7bee8d3.chunk.js.map",
     "index.html": "/fidelity-portfolio/index.html",
     "static/css/2.a75d72ee.chunk.css.map": "/fidelity-portfolio/static/css/2.a75d72ee.chunk.css.map",
     "static/css/main.fe2bcd96.chunk.css.map": "/fidelity-portfolio/static/css/main.fe2bcd96.chunk.css.map",
-    "static/js/2.56a6324d.chunk.js.LICENSE.txt": "/fidelity-portfolio/static/js/2.56a6324d.chunk.js.LICENSE.txt",
+    "static/js/2.678839ba.chunk.js.LICENSE.txt": "/fidelity-portfolio/static/js/2.678839ba.chunk.js.LICENSE.txt",
     "static/media/font-awesome.min.css": "/fidelity-portfolio/static/media/fontawesome-webfont.f691f37e.woff"
   },
   "entrypoints": [
-    "static/js/runtime-main.c6666a1b.js",
+    "static/js/runtime-main.9211d1ee.js",
     "static/css/2.a75d72ee.chunk.css",
-    "static/js/2.56a6324d.chunk.js",
+    "static/js/2.678839ba.chunk.js",
     "static/css/main.fe2bcd96.chunk.css",
-    "static/js/main.040eda7e.chunk.js"
+    "static/js/main.2ce54034.chunk.js"
   ]
 }
