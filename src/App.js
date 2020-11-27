@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { cloneDeep } from 'lodash'
 import { toast } from 'react-toastify' // Must be initialized in App.js (see https://github.com/fkhadra/react-toastify#usage)
+import XLSX from 'xlsx';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
@@ -120,24 +121,51 @@ const App = () => {
         return newElements;
     }
 
-    const processScreenerResultsBasicFacts = (rows) => {
+    const processScreener = (workbook) => {
+        if (portfolio.stocks.length === 0) {
+            toast.warn(`Portfolio overview must be imported first`, {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true
+            });
+            return;
+        }
         portfolio = cloneDeep(portfolio);
         portfolio.sectors = [];
-        // Add new row data to stocks
-        for (let i = 1 /* skip header row */; i < rows.length; i++) {
-            var columns = splitCSVButIgnoreCommasInDoublequotes(rows[i]);
-            // First blank line ends the data portion of the file
-            let symbol = columns[0];
-            if (symbol === '\r') {
+        let rows = XLSX.utils.sheet_to_row_object_array(workbook.Sheets['Search Criteria']);
+        for (let row of rows) {
+            // First missing company name ends the data portion of the file
+            const companyName = row['Company Name'];
+            if (!companyName) {
                 break;
             }
             // Merge in additional data if stock exists in portfolio
-            let stock = portfolio.stocks.find(s => s.symbol === symbol);
+            let stock = portfolio.stocks.find(s => s.symbol === row['Symbol']);
             if (stock) {
                 // Only get important columns
-                stock.dividendPerShare = (Number(columns[5].replace(/[$%",]/g, '')) * stock.lastPrice / 400); // dividendYield * lastPrice / 4 (quarterly payments)
-                stock.sector = columns[7];
-                stock.industry = columns[8];
+                stock.earningsPerShare = stock.lastPrice / row['P/E (Price/TTM Earnings)']; // lastPrice / PriceEarningsRatio
+                stock.summaryScore = row['Equity Summary Score from StarMine from Refinitiv'];
+                // Calculated fields
+                stock.priceEarningsRatio = stock.lastPrice / stock.earningsPerShare;
+            }
+        }
+        rows = XLSX.utils.sheet_to_row_object_array(workbook.Sheets['Basic Facts']);
+            for (let row of rows) {
+            // First missing company name ends the data portion of the file
+            const companyName = row['Company Name'];
+            if (!companyName) {
+                break;
+            }
+            // Merge in additional data if stock exists in portfolio
+            let stock = portfolio.stocks.find(s => s.symbol === row['Symbol']);
+            if (stock) {
+                // Only get important columns
+                stock.dividendPerShare = row['Dividend Yield'] * stock.lastPrice / 400; // dividendYield * lastPrice / 4 (quarterly payments)
+                stock.sector = row['Sector'];
+                stock.industry = row['Industry'];
                 // Calculated fields
                 stock.dividendPayoutPercentage = stock.dividendPerShare * 4 / stock.earningsPerShare;
                 stock.dividendYieldPercentage = stock.dividendPerShare * 4 / stock.lastPrice;
@@ -185,31 +213,18 @@ const App = () => {
             }
         }
         dispatch(updatePortfolio(portfolio));
-    }
-
-    const processScreenerResultsSearchCriteria = (rows) => {
-        portfolio = cloneDeep(portfolio);
-        for (let i = 1 /* skip header row */; i < rows.length; i++) {
-            var columns = splitCSVButIgnoreCommasInDoublequotes(rows[i]);
-            // First blank line ends the data portion of the file
-            const symbol = columns[0];
-            if (symbol === '\r') {
-                break;
-            }
-            // Merge in additional data if stock exists in portfolio
-            let stock = portfolio.stocks.find(s => s.symbol === symbol);
-            if (stock) {
-                // Only get important columns
-                stock.earningsPerShare = stock.lastPrice / Number(columns[4].replace(/[$%",]/g, '')); // lastPrice / PriceEarningsRatio
-                stock.summaryScore = columns[5];
-                // Calculated fields
-                stock.priceEarningsRatio = stock.lastPrice / stock.earningsPerShare;
-            }
-        }
-        dispatch(updatePortfolio(portfolio));
+        toast.success(`Screen data imported`, {
+            position: "top-right",
+            autoClose: 500,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: false,
+            draggable: false
+        });
     }
 
     const processPortfolioOverview = (rows) => {
+        // handle data processing of portfolio
         let portfolio = {
             currentValue: 0,
             sectors: [],
@@ -251,9 +266,15 @@ const App = () => {
             }
             return 0;
         });
-        //setPortfolio(portfolio);
-        console.log(portfolio);
         dispatch(updatePortfolio(portfolio));
+        toast.success(`Portfolio data imported`, {
+            position: "top-right",
+            autoClose: 500,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: false,
+            draggable: false
+        });
     }
 
     // Event Handlers
@@ -290,50 +311,22 @@ const App = () => {
             });
             return;
         }
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            // handle data processing
-            const rows = reader.result.toString().split('\n');
-            // Check to see what type of file was imported based off its header
-            if (rows[0].substring(0, 12) === 'Account Name') {
-                processPortfolioOverview(rows);
-            } else {
-                if (portfolio.stocks.length === 0) {
-                    toast.warn(`Portfolio overview must be imported first`, {
-                        position: "top-right",
-                        autoClose: 3000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true
-                    });
-                    return;
-                }
-                if (rows[0].substring(0, 33) === 'Symbol,Company Name,Security Type') {
-                    processScreenerResultsSearchCriteria(rows);
-                } else if (rows[0].substring(0, 34) === 'Symbol,Company Name,Security Price') {
-                    processScreenerResultsBasicFacts(rows);
-                } else {
-                    toast.warn(`File header not recognized`, {
-                        position: "top-right",
-                        autoClose: 3000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true
-                    });
-                }
-            }
-            toast.success(`File imported`, {
-                position: "top-right",
-                autoClose: 500,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: false,
-                draggable: false
-            });
+        let file = event.target.files[0]
+        const textReader = new FileReader();
+        const binaryStringReader = new FileReader();
+        textReader.onloadend = () => {
+            const rows = textReader.result.toString().split('\n');
+            processPortfolioOverview(rows);
         }
-        reader.readAsText(event.target.files[0]);
+        binaryStringReader.onload = () => {
+            const workbook = XLSX.read(binaryStringReader.result, { type: 'binary' });
+            processScreener(workbook);
+        }
+        if(file.name.indexOf(".csv") > 0 ) {
+            textReader.readAsText(file);
+        } else {
+            binaryStringReader.readAsBinaryString(file);
+        }
     }
 
     const handleOnRules = () => {
@@ -353,7 +346,7 @@ const App = () => {
         <div className={`container-fluid ${css.app}`}>
             <div>
                 <label className="btn btn-info" onChange={handleDataImport}>
-                    Import <input type="file" multiple={false} accept=".csv" hidden />
+                    Import <input type="file" multiple={false} accept=".csv,.xls" hidden />
                 </label>
                 &nbsp;
                 <label className="btn btn-info" onClick={handleDataExport}>Export</label>

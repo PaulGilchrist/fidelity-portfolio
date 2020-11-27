@@ -29,7 +29,7 @@ const GettingStarted = (props) => {
                         </div>
                         <div className="card-body">
                             <ol>
-                                <li>From Fidelity's website <a href="https://research2.fidelity.com/fidelity/screeners/commonstock/landing.asp?" target="_blank" rel="noreferrer">load existing or create a new "Screen"</a> with the following criteria and order, as the order they are added determines the order columns appear in the resulting data flie</li>
+                                <li>From Fidelity's website <a href="https://research2.fidelity.com/fidelity/screeners/commonstock/landing.asp?" target="_blank" rel="noreferrer">load existing or create a new "Screen"</a> with the following criteria</li>
                                 <ul>
                                     <li><b>"Company Value - P/E - Price/TTM Earnings"</b> choosing all categories "Very Low" through "Very High"</li>
                                     <li><b>"Analyst Opinions - Equity Summary Score from StarMine from Fefinitiv"</b> choosing all categories "Very Bearish" through "Very Bullish"</li>
@@ -37,9 +37,8 @@ const GettingStarted = (props) => {
                                 </ul>
                                 <li>Optionally, add up to 5 stocks manually that may not have been returned from the search results</li>
                                 <li>Select "Save to My Screens" for later reuse</li>
-                                <li>Download the Screen's "Search Criteria" and "Basic Facts" data.  Data will be saved in Excel format, but this application needs the data in CSV format.</li>
-                                <li>Open the file in Excel and save each of the two tabs as separate "CSV (Comma delimited) (*.csv)" files.  "SaveAs" is disabled unless "enable Editing" has first been selected.</li>
-                                <li>Import the two previous saved Screen "Search Criteria" and "Basic Facts" data files.  This data will merge together with your portfolio data</li>
+                                <li>Download the Screen's "Search Criteria" and "Basic Facts" data</li>
+                                <li>Import the Screen file into this application.  This data will merge together with your portfolio data</li>
                             </ol>
                         </div>
                     </div>
