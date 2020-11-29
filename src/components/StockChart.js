@@ -53,12 +53,21 @@ const StockChart = (props) => {
         utilities.sort(props.portfolio.stocks, propertyName, descendingSort);
     }
 
+    let subtitle = '';
+    if(props.portfolio.portfolioOverviewFileDate) {
+        subtitle += `(portfolio-${utilities.shortDate(props.portfolio.portfolioOverviewFileDate)}`;
+        if(props.portfolio.screenFileDate) {
+            subtitle += `, screen-${utilities.shortDate(props.portfolio.screenFileDate)}`;
+        }
+        subtitle += ')';
+    }
+
     return (
         <div className="stock-chart">
             <div className="card" id="chart">
                 <div className="card-heading bg-dark text-light">
                     <button className='btn btn-secondary btn-rules' onClick={props.onRules}> Rules</button>
-                    <span>Stock Portfolio</span>
+                    <div className="title">Stock Portfolio<span className="subtitle">{subtitle}</span></div>
                 </div>
                 <div className="card-body">
                     <div className="table-responsive">

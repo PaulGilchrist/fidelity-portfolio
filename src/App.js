@@ -121,7 +121,7 @@ const App = () => {
         return newElements;
     }
 
-    const processScreener = (workbook) => {
+    const processScreener = (workbook, fileDate) => {
         if (portfolio.stocks.length === 0) {
             toast.warn(`Portfolio overview must be imported first`, {
                 position: "top-right",
@@ -134,6 +134,7 @@ const App = () => {
             return;
         }
         portfolio = cloneDeep(portfolio);
+        portfolio.screenFileDate = fileDate;
         portfolio.sectors = [];
         let rows = XLSX.utils.sheet_to_row_object_array(workbook.Sheets['Search Criteria']);
         for (let row of rows) {
@@ -223,10 +224,12 @@ const App = () => {
         });
     }
 
-    const processPortfolioOverview = (rows) => {
+    const processPortfolioOverview = (rows, fileDate) => {
         // handle data processing of portfolio
         let portfolio = {
             currentValue: 0,
+            portfolioOverviewFileDate: fileDate,
+            screenFileDate: null,
             sectors: [],
             stocks: []
         }
@@ -312,15 +315,16 @@ const App = () => {
             return;
         }
         let file = event.target.files[0]
+        let fileDate = new Date(file.lastModified);
         const textReader = new FileReader();
         const binaryStringReader = new FileReader();
         textReader.onloadend = () => {
             const rows = textReader.result.toString().split('\n');
-            processPortfolioOverview(rows);
+            processPortfolioOverview(rows, fileDate);
         }
         binaryStringReader.onload = () => {
             const workbook = XLSX.read(binaryStringReader.result, { type: 'binary' });
-            processScreener(workbook);
+            processScreener(workbook, fileDate);
         }
         if(file.name.indexOf(".csv") > 0 ) {
             textReader.readAsText(file);

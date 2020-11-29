@@ -17,13 +17,11 @@ export let utilities = {
             return inputObjectArray;
         }
     },
-    guid: () => {
-		return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-            // eslint-disable-next-line
-			const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
-			return v.toString(16);
-		});
-	},
+    guid: () => 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        // eslint-disable-next-line
+        const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    }),
     isDate: (value) => {
         if(!value) {
             return false;
@@ -38,14 +36,18 @@ export let utilities = {
         dateFormat = /(^\d{1,4}[.|\\/|-]\d{1,2}[.|\\/|-]\d{1,4})(\s*(?:0?[1-9]:[0-5]|1(?=[012])\d:[0-5])\d\s*[ap]m)?$/;
         return dateFormat.test(value);
     },
-    jsonParseNumbers: (inputObject) => {
-        return JSON.parse(inputObject, (k, v) => {
-            if(typeof v === "object") {
-                return v;
-            } else {
-                return isNaN(v) ? v : Number(v);
-            }
-        });
+    jsonParseNumbers: (inputObject) => JSON.parse(inputObject, (k, v) => {
+        if(typeof v === "object") {
+            return v;
+        } else if (utilities.isDate(v)) {
+            return new Date(v);
+        } else {
+            return isNaN(v) ? v : Number(v);
+        }
+    }),
+    shortDate: (value) => {
+        const dateValue = new Date(value);
+        return `${dateValue.getMonth() + 1}/${dateValue.getDate()}/${dateValue.getFullYear()}`
     },
     sort: (inputObjectArray, propertyName, descending = false) => {
         // Sort an array of objects (in place) by the value of a given propertyName either ascending (default) or descending

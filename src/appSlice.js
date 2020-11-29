@@ -4,6 +4,8 @@ import { utilities } from './utilities';
 /*
 portfolio = {
     currentValue: number,
+    portfolioOverviewFileDate: date,
+    screenFileDate: date,
     sectors: [
         {
             name: string,
@@ -58,6 +60,8 @@ if(portfolioJson) {
 } else {
     initialPortfolio = {
         currentValue: 0,
+        portfolioOverviewFileDate: null,
+        screenFileDate: null,
         sectors: [],
         stocks: []
     };
