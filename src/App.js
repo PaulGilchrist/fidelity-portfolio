@@ -82,44 +82,44 @@ const App = () => {
         return score;
     }
 
-    const splitCSVButIgnoreCommasInDoublequotes = (str) => {
-        //split the str first  
-        //then merge the elments between two double quotes  
-        let delimiter = ',';
-        let quotes = '"';
-        let elements = str.split(delimiter);
-        let newElements = [];
-        for (let i = 0; i < elements.length; ++i) {
-            if (elements[i].indexOf(quotes) >= 0) {//the left double quotes is found  
-                let indexOfRightQuotes = -1;
-                let tmp = elements[i];
-                //find the right double quotes  
-                for (let j = i + 1; j < elements.length; ++j) {
-                    if (elements[j].indexOf(quotes) >= 0) {
-                        indexOfRightQuotes = j;
-                        break;
-                    }
-                }
-                //found the right double quotes  
-                //merge all the elements between double quotes  
-                if (-1 !== indexOfRightQuotes) {
-                    for (let k = i + 1; k <= indexOfRightQuotes; ++k) {
-                        tmp = tmp + delimiter + elements[k];
-                    }
-                    newElements.push(tmp);
-                    i = indexOfRightQuotes;
-                }
-                else { //right double quotes is not found  
-                    newElements.push(elements[i]);
-                }
-            }
-            else {//no left double quotes is found  
-                newElements.push(elements[i]);
-            }
-        }
+    // const splitCSVButIgnoreCommasInDoublequotes = (str) => {
+    //     //split the str first  
+    //     //then merge the elments between two double quotes  
+    //     let delimiter = ',';
+    //     let quotes = '"';
+    //     let elements = str.split(delimiter);
+    //     let newElements = [];
+    //     for (let i = 0; i < elements.length; ++i) {
+    //         if (elements[i].indexOf(quotes) >= 0) {//the left double quotes is found  
+    //             let indexOfRightQuotes = -1;
+    //             let tmp = elements[i];
+    //             //find the right double quotes  
+    //             for (let j = i + 1; j < elements.length; ++j) {
+    //                 if (elements[j].indexOf(quotes) >= 0) {
+    //                     indexOfRightQuotes = j;
+    //                     break;
+    //                 }
+    //             }
+    //             //found the right double quotes  
+    //             //merge all the elements between double quotes  
+    //             if (-1 !== indexOfRightQuotes) {
+    //                 for (let k = i + 1; k <= indexOfRightQuotes; ++k) {
+    //                     tmp = tmp + delimiter + elements[k];
+    //                 }
+    //                 newElements.push(tmp);
+    //                 i = indexOfRightQuotes;
+    //             }
+    //             else { //right double quotes is not found  
+    //                 newElements.push(elements[i]);
+    //             }
+    //         }
+    //         else {//no left double quotes is found  
+    //             newElements.push(elements[i]);
+    //         }
+    //     }
 
-        return newElements;
-    }
+    //     return newElements;
+    // }
 
     const processScreener = (workbook, fileDate) => {
         if (portfolio.stocks.length === 0) {
@@ -224,7 +224,7 @@ const App = () => {
         });
     }
 
-    const processPortfolioOverview = (rows, fileDate) => {
+    const processPortfolioOverview = (workbook, fileDate) => {
         // handle data processing of portfolio
         let portfolio = {
             currentValue: 0,
@@ -233,20 +233,21 @@ const App = () => {
             sectors: [],
             stocks: []
         }
-        for (let i = 1 /* skip header row */; i < rows.length; i++) {
-            var columns = splitCSVButIgnoreCommasInDoublequotes(rows[i]);
-            // First blank line ends the data portion of the file
-            if (columns[0] === '\r') {
+        let rows = XLSX.utils.sheet_to_row_object_array(workbook.Sheets.Sheet1);
+        for (let row of rows) {
+            // First missing Quantity ends the data portion of the file
+            const lastPriceChange = row['Quantity'];
+            if (!lastPriceChange) {
                 break;
             }
             const newStock = {
                 // Only get important columns
-                symbol: columns[1],
-                description: columns[2].split("USD")[0].split(" COM")[0].split(" CORP")[0].split(" INC")[0], // Remove excess description
-                quantity: Number(columns[3].replace(/[$%",]/g, '')),
-                lastPrice: Number(columns[4].replace(/[$%",]/g, '')),
-                currentValue: Number(columns[6].replace(/[$%",]/g, '')),
-                costBasis: Number(columns[12].replace(/[$%",]/g, '')),
+                symbol: row['Symbol'],
+                description: row['Description'].split("USD")[0].split(" COM")[0].split(" CORP")[0].split(" INC")[0], // Remove excess description
+                quantity: Number(row['Quantity']),
+                lastPrice: Number(row['Last Price']),
+                currentValue: Number(row['Current Value']), // .replace(/[$%",]/g, '')
+                costBasis: Number(row['Cost Basis Total']),
             }
             // Add or merge into array
             let existingStock = portfolio.stocks.find(s => s.symbol === newStock.symbol);
@@ -279,6 +280,62 @@ const App = () => {
             draggable: false
         });
     }
+    
+    // const processPortfolioOverviewPreview = (rows, fileDate) => {
+    //     // handle data processing of portfolio
+    //     let portfolio = {
+    //         currentValue: 0,
+    //         portfolioOverviewFileDate: fileDate,
+    //         screenFileDate: null,
+    //         sectors: [],
+    //         stocks: []
+    //     }
+    //     for (let i = 1 /* skip header row */; i < rows.length; i++) {
+    //         var columns = splitCSVButIgnoreCommasInDoublequotes(rows[i]);
+    //         // First blank line ends the data portion of the file
+    //         if (columns[0] === '\r') {
+    //             break;
+    //         }
+    //         const newStock = {
+    //             // Only get important columns
+    //             symbol: columns[1],
+    //             description: columns[2].split("USD")[0].split(" COM")[0].split(" CORP")[0].split(" INC")[0], // Remove excess description
+    //             quantity: Number(columns[3].replace(/[$%",]/g, '')),
+    //             lastPrice: Number(columns[4].replace(/[$%",]/g, '')),
+    //             currentValue: Number(columns[6].replace(/[$%",]/g, '')),
+    //             costBasis: Number(columns[12].replace(/[$%",]/g, '')),
+    //         }
+    //         // Add or merge into array
+    //         let existingStock = portfolio.stocks.find(s => s.symbol === newStock.symbol);
+    //         if (existingStock) {
+    //             // Merge stocks together
+    //             existingStock.quantity += newStock.quantity;
+    //             existingStock.costBasis += newStock.costBasis;
+    //             existingStock.currentValue += newStock.currentValue;
+    //         } else {
+    //             // Add
+    //             portfolio.stocks.push(newStock);
+    //         }
+    //     }
+    //     portfolio.stocks.sort((a, b) => {
+    //         if (a.symbol < b.symbol) {
+    //             return -1;
+    //         }
+    //         if (b.symbol < a.symbol) {
+    //             return 1;
+    //         }
+    //         return 0;
+    //     });
+    //     dispatch(updatePortfolio(portfolio));
+    //     toast.success(`Portfolio data imported`, {
+    //         position: "top-right",
+    //         autoClose: 500,
+    //         hideProgressBar: false,
+    //         closeOnClick: false,
+    //         pauseOnHover: false,
+    //         draggable: false
+    //     });
+    // }
 
     // Event Handlers
     const handleOnCloseRulesEditor = (event) => {
@@ -290,7 +347,7 @@ const App = () => {
         // Add each row of the table
         for (const stock of portfolio.stocks) {
             let score = getStockScore(stock);
-            csv += `${stock.symbol},${score},${stock.description},${stock.sector || ''},${stock.industry || ''},${forcePrecision(stock.lastPrice)},${forcePrecision(stock.quantity)},${forcePrecision(stock.earningsPerShare)},${forcePrecision(stock.dividendPerShare)},${forcePrecision(stock.costBasis)},${forcePrecision(stock.currentValue)},${stock.summaryScore || ''},${forcePrecision(stock.priceEarningsRatio)},${forcePrecision(stock.dividendPayoutPercentage)},${forcePrecision(stock.dividendYieldPercentage, 4)},${forcePrecision(stock.stockPercentage, 4)},${forcePrecision(stock.sectorPercentage, 4)},${forcePrecision(stock.industryPercentage, 4)}\n`;
+            csv += `${stock.symbol},${score},${stock.description},${stock.sector || ''},${(stock.industry || '').replace(',', '')},${forcePrecision(stock.lastPrice)},${forcePrecision(stock.quantity)},${forcePrecision(stock.earningsPerShare)},${forcePrecision(stock.dividendPerShare)},${forcePrecision(stock.costBasis)},${forcePrecision(stock.currentValue)},${stock.summaryScore || ''},${forcePrecision(stock.priceEarningsRatio)},${forcePrecision(stock.dividendPayoutPercentage)},${forcePrecision(stock.dividendYieldPercentage, 4)},${forcePrecision(stock.stockPercentage, 4)},${forcePrecision(stock.sectorPercentage, 4)},${forcePrecision(stock.industryPercentage, 4)}\n`;
         }
         const blob = new Blob([csv], { type: 'text/plain' });
         const href = URL.createObjectURL(blob);
@@ -316,19 +373,25 @@ const App = () => {
         }
         let file = event.target.files[0]
         let fileDate = new Date(file.lastModified);
-        const textReader = new FileReader();
-        const binaryStringReader = new FileReader();
-        textReader.onloadend = () => {
-            const rows = textReader.result.toString().split('\n');
-            processPortfolioOverview(rows, fileDate);
-        }
-        binaryStringReader.onload = () => {
-            const workbook = XLSX.read(binaryStringReader.result, { type: 'binary' });
-            processScreener(workbook, fileDate);
-        }
-        if(file.name.indexOf(".csv") > 0 ) {
-            textReader.readAsText(file);
+       if(file.name.indexOf("Portfolio_Position") === 0) {
+            // const textReader = new FileReader();
+            // textReader.onloadend = () => {
+            //     const rows = textReader.result.toString().split('\n');
+            //     processPortfolioOverview(rows, fileDate);
+            // }
+            //textReader.readAsText(file);
+            const binaryStringReader = new FileReader();
+            binaryStringReader.onload = () => {
+                const workbook = XLSX.read(binaryStringReader.result, { type: 'binary' });
+                processPortfolioOverview(workbook, fileDate);
+            }
+            binaryStringReader.readAsBinaryString(file);
         } else {
+            const binaryStringReader = new FileReader();
+            binaryStringReader.onload = () => {
+                const workbook = XLSX.read(binaryStringReader.result, { type: 'binary' });
+                processScreener(workbook, fileDate);
+            }
             binaryStringReader.readAsBinaryString(file);
         }
     }
