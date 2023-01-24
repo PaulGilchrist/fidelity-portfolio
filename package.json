@@ -39,28 +39,23 @@
     "version": "1.0.0",
     "dependencies": {
         "@reduxjs/toolkit": "^1.5.0",
-        "bootstrap": "^4.5.3",
+        "bootstrap": "^5.2.3",
         "font-awesome": "^4.7.0",
-        "lodash": "^4.17.20",
-        "react": "^17.0.1",
-        "react-dom": "^17.0.1",
-        "react-hook-form": "^6.11.4",
+        "lodash": "^4.17.21",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-hook-form": "^7.42.1",
         "react-redux": "^7.2.2",
-        "react-scripts": "4.0.0",
+        "react-scripts": "5.0.1",
         "react-toastify": "^6.1.0",
         "redux": "^4.0.5",
-        "web-vitals": "^1.0.1",
+        "web-vitals": "^2.1.4",
         "xlsx": "^0.16.9"
     },
     "devDependencies": {
-        "@testing-library/jest-dom": "^5.11.6",
-        "@testing-library/react": "^11.2.2",
-        "@testing-library/user-event": "^12.2.2",
-        "eslint": "^7.14.0",
-        "eslint-plugin-react": "^7.21.5",
-        "eslint-plugin-react-hooks": "^4.2.0",
-        "gh-pages": "^3.1.0",
-        "prettier": "^2.2.0",
-        "redux-devtools": "^3.7.0"
+        "@testing-library/jest-dom": "^5.16.5",
+        "@testing-library/react": "^13.4.0",
+        "@testing-library/user-event": "^13.5.0",
+        "gh-pages": "^5.0.0"
     }
 }

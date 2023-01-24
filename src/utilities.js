@@ -1,3 +1,5 @@
+import { cloneDeep } from 'lodash'
+
 export let utilities = {
     filter: (inputObjectArray, searchString) => {
         // Filters any objects from the array where any of their properties contain the passed in search string
@@ -52,7 +54,8 @@ export let utilities = {
     sort: (inputObjectArray, propertyName, descending = false) => {
         // Sort an array of objects (in place) by the value of a given propertyName either ascending (default) or descending
         if (inputObjectArray && propertyName) {
-            inputObjectArray.sort((a, b) => {
+            let objectArray = cloneDeep(inputObjectArray);
+            return objectArray.sort((a, b) => {
                 let aValue = a[propertyName];
                 let bValue = b[propertyName];
                 // Check if strings are actually dates

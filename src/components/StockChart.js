@@ -6,6 +6,7 @@ import './StockChart.css'
 const StockChart = (props) => {
 
     let [descendingSort, setDecendingSort] = useState(true);
+    let [stocks, setStocks] = useState(props.portfolio.stocks);
 
     const getScore = (value, rule) => {
         let score = 0;
@@ -50,7 +51,7 @@ const StockChart = (props) => {
     
     const handleSort = (propertyName) => {
         setDecendingSort(!descendingSort);
-        utilities.sort(props.portfolio.stocks, propertyName, descendingSort);
+        setStocks(utilities.sort(stocks, propertyName, descendingSort));
     }
 
     let subtitle = '';
@@ -95,7 +96,7 @@ const StockChart = (props) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {props.portfolio.stocks.map((stock, index) => {
+                                {stocks.map((stock, index) => {
                                     const summaryScore = getSummaryScore(stock);
                                     const priceEarningsRatioScore = getScore(stock.priceEarningsRatio, props.scoringRules.priceEarningsRatio);
                                     const dividendPayoutPercentageScore = getScore(stock.dividendPayoutPercentage, props.scoringRules.dividendPayoutPercentage);
