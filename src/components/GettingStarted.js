@@ -1,6 +1,4 @@
 import React from 'react';
-import { useForm } from "react-hook-form";
-
 import './GettingStarted.css'
 
 const GettingStarted = (props) => {

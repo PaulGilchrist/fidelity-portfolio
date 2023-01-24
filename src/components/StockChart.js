@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { utilities } from './../utilities';
+import {utilities} from './../utilities';
 
 import './StockChart.css'
 
