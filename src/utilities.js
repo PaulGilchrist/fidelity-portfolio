@@ -5,7 +5,7 @@ export let utilities = {
         // Filters any objects from the array where any of their properties contain the passed in search string
         if (inputObjectArray != null && searchString != null && searchString.length > 0) {
             const searchStringLower = searchString.toLowerCase();
-            return inputObjectArray.filter(o => {
+            return inputObjectArray.filter(o => {  // Shallow copy
                 for (const property in o) { // Look at each property
                     if (typeof o[property] === 'string') {
                         if (o[property].toLowerCase().indexOf(searchStringLower) !== -1) {

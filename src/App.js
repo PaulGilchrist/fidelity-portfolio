@@ -12,6 +12,8 @@ import GettingStarted from './components/GettingStarted';
 import RulesEditor from './components/RulesEditor';
 import StockChart from './components/StockChart';
 
+import {getStockScore} from './libraries/scores';
+
 const App = (props) => {
     let [showRules, setShowRules] = useState(false);
     let [portfolio, setPortfolio] = useState(props.initialPortfolio);
@@ -22,58 +24,6 @@ const App = (props) => {
 
     const forcePrecision = (num, precision = 2) => num ? num.toFixed(precision) : '';
 
-    const getScore = (value, rule) => {
-        if(value) {
-            if (value > rule.max) {
-                if (rule.highValueBetter)
-                    return rule.weight;
-                return -rule.weight;
-            } else if (value < rule.min) {
-                if (rule.highValueBetter)
-                    return -rule.weight;
-                return rule.weight;
-            }
-        }
-        return 0;
-    }
-
-    const getStockScore = (stock) => {
-        let score = 0;
-        // Do not get an overall score unless we have earningsPerShare, as it is needed to calculate many of the important metrics
-        if(stock.earningsPerShare) {
-            score += getScore(stock.dividendPayoutPercentage, scoringRules.dividendPayoutPercentage);
-            score += getScore(stock.dividendYieldPercentage, scoringRules.dividendYieldPercentage);
-            score += getScore(stock.industryPercentage, scoringRules.industryPercentage);
-            score += getScore(stock.priceEarningsRatio, scoringRules.priceEarningsRatio);
-            score += getScore(stock.sectorPercentage, scoringRules.sectorPercentage);
-            score += getScore(stock.stockPercentage, scoringRules.stockPercentage);
-            // Summary Score is a special rule
-            score += getSummaryScore(stock);
-        }
-        return score;
-    }
-
-    const getSummaryScore = (stock) => {
-        let score = 0;
-        const weight = scoringRules.summaryScore.weight
-        switch (stock.summaryScore) {
-            case 'Very Bullish':
-                score += (weight*2)
-                break;
-            case 'Bullish':
-                score += weight
-                break;
-            case 'Bearish':
-                score -= weight
-                break;
-            case 'Very Bearish':
-                score -= (weight*2)
-                break;
-            default: // 'Neutral'
-        }
-        return score;
-    }
-
     // Event Handlers
     const handleOnCloseRulesEditor = (event) => {
         setShowRules(false);
@@ -83,7 +33,7 @@ const App = (props) => {
         let csv = 'Symbol,Score,Description,Sector,Industry,Last Price,Quantity,EPS,Dividend,Cost Basis,Current Value,Summary Score,P/E,Dividend Payout %,Dividend Yield %,Stock %,Sector %,Industry %\n';
         // Add each row of the table
         for (const stock of portfolio.stocks) {
-            let score = getStockScore(stock);
+            let score = getStockScore(stock, scoringRules);
             csv += `${stock.symbol},${score},${stock.description},${stock.sector || ''},${(stock.industry || '').replace(',', '')},${forcePrecision(stock.lastPrice)},${forcePrecision(stock.quantity)},${forcePrecision(stock.earningsPerShare)},${forcePrecision(stock.dividendPerShare)},${forcePrecision(stock.costBasis)},${forcePrecision(stock.currentValue)},${stock.summaryScore || ''},${forcePrecision(stock.priceEarningsRatio)},${forcePrecision(stock.dividendPayoutPercentage)},${forcePrecision(stock.dividendYieldPercentage, 4)},${forcePrecision(stock.stockPercentage, 4)},${forcePrecision(stock.sectorPercentage, 4)},${forcePrecision(stock.industryPercentage, 4)}\n`;
         }
         const blob = new Blob([csv], { type: 'text/plain' });
