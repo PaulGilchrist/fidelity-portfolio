@@ -1,8 +1,7 @@
 {
   "files": {
     "main.css": "/fidelity-portfolio/static/css/main.f2e68e92.css",
-    "main.js": "/fidelity-portfolio/static/js/main.3516183b.js",
-    "static/js/787.415364aa.chunk.js": "/fidelity-portfolio/static/js/787.415364aa.chunk.js",
+    "main.js": "/fidelity-portfolio/static/js/main.f058155d.js",
     "static/media/fontawesome-webfont.svg?v=4.7.0": "/fidelity-portfolio/static/media/fontawesome-webfont.c1e38fd9e0e74ba58f7a.svg",
     "static/media/fontawesome-webfont.eot": "/fidelity-portfolio/static/media/fontawesome-webfont.8b43027f47b20503057d.eot",
     "static/media/fontawesome-webfont.ttf?v=4.7.0": "/fidelity-portfolio/static/media/fontawesome-webfont.1e59d2330b4c6deb84b3.ttf",
@@ -10,11 +9,10 @@
     "static/media/fontawesome-webfont.woff2?v=4.7.0": "/fidelity-portfolio/static/media/fontawesome-webfont.20fd1704ea223900efa9.woff2",
     "index.html": "/fidelity-portfolio/index.html",
     "main.f2e68e92.css.map": "/fidelity-portfolio/static/css/main.f2e68e92.css.map",
-    "main.3516183b.js.map": "/fidelity-portfolio/static/js/main.3516183b.js.map",
-    "787.415364aa.chunk.js.map": "/fidelity-portfolio/static/js/787.415364aa.chunk.js.map"
+    "main.f058155d.js.map": "/fidelity-portfolio/static/js/main.f058155d.js.map"
   },
   "entrypoints": [
     "static/css/main.f2e68e92.css",
-    "static/js/main.3516183b.js"
+    "static/js/main.f058155d.js"
   ]
 }
