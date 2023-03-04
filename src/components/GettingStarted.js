@@ -27,15 +27,9 @@ const GettingStarted = (props) => {
                         </div>
                         <div className="card-body">
                             <ol>
-                                <li>From Fidelity's website <a href="https://research2.fidelity.com/fidelity/screeners/commonstock/landing.asp?" target="_blank" rel="noreferrer">load existing or create a new "Screen"</a> with the following criteria</li>
-                                <ul>
-                                    <li><b>"Company Value - P/E - Price/TTM Earnings"</b> choosing all categories "Very Low" through "Very High"</li>
-                                    <li><b>"Analyst Opinions - Equity Summary Score from StarMine from Fefinitiv"</b> choosing all categories "Very Bearish" through "Very Bullish"</li>
-                                    <li><b>"Basic Company Facts / Index"</b> choosing all 3 indexes "DJIA", "NASDAQ 100" and "S&P 500"</li>
-                                </ul>
-                                <li>Optionally, add up to 5 stocks manually that may not have been returned from the search results</li>
+                                <li>From Fidelity's website <a href="https://research2.fidelity.com/fidelity/screeners/commonstock/landing.asp?" target="_blank" rel="noreferrer">load existing or create a new "Screen"</a> using criteria that covers the stocks in your current portfolio.</li>
                                 <li>Select "Save to My Screens" for later reuse</li>
-                                <li>Download the Screen's "Search Criteria" and "Basic Facts" data</li>
+                                <li>Select "Download Results" and choose all available views</li>
                                 <li>Import the Screen file into this application.  This data will merge together with your portfolio data</li>
                             </ol>
                         </div>

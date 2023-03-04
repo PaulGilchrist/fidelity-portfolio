@@ -163,41 +163,19 @@ const App = (props) => {
         }
         portfolio.screenFileDate = fileDate;
         portfolio.sectors = [];
-        let rows = XLSX.utils.sheet_to_row_object_array(workbook.Sheets['Search Criteria']);
-        for (let row of rows) {
-            // First missing company name ends the data portion of the file
-            const companyName = row['Company Name'];
-            if (!companyName) {
-                break;
-            }
-            // Merge in additional data if stock exists in portfolio
-            let stock = portfolio.stocks.find(s => s.symbol === row['Symbol']);
-            if (stock) {
-                // Only get important columns
-                stock.earningsPerShare = stock.lastPrice / row['P/E (Price/TTM Earnings)']; // lastPrice / PriceEarningsRatio
-                stock.summaryScore = row['Equity Summary Score from StarMine from Refinitiv'];
-                // Calculated fields
-                stock.priceEarningsRatio = stock.lastPrice / stock.earningsPerShare;
-            }
-        }
-        rows = XLSX.utils.sheet_to_row_object_array(workbook.Sheets['Basic Facts']);
+        let rows = XLSX.utils.sheet_to_row_object_array(workbook.Sheets['Basic Facts']);
             for (let row of rows) {
-            // First missing company name ends the data portion of the file
             const companyName = row['Company Name'];
             if (!companyName) {
-                break;
+                break;  // end of file
             }
-            // Merge in additional data if stock exists in portfolio
             let stock = portfolio.stocks.find(s => s.symbol === row['Symbol']);
             if (stock) {
-                // Only get important columns
-                stock.dividendPerShare = row['Dividend Yield'] * stock.lastPrice / 400; // dividendYield * lastPrice / 4 (quarterly payments)
+                stock.lastPrice = row['Security Price']
+                stock.dividendPerShare = row['Dividend Yield'] * stock.lastPrice / 400; // 4 (quarterly payments)
                 stock.sector = row['Sector'];
                 stock.industry = row['Industry'];
-                // Calculated fields
-                stock.dividendPayoutPercentage = stock.dividendPerShare * 4 / stock.earningsPerShare;
                 stock.dividendYieldPercentage = stock.dividendPerShare * 4 / stock.lastPrice;
-                // Get sector and industry summations
                 let sector = portfolio.sectors.find(s => s.name === stock.sector);
                 if (sector) {
                     sector.currentValue += stock.currentValue;
@@ -222,6 +200,30 @@ const App = (props) => {
                         ]
                     });
                 }
+            }
+        }
+        rows = XLSX.utils.sheet_to_row_object_array(workbook.Sheets['Valuation, Growth & Ownership']);
+        for (let row of rows) {
+            const companyName = row['Company Name'];
+            if (!companyName) {
+                break; // end of file
+            }
+            let stock = portfolio.stocks.find(s => s.symbol === row['Symbol']);
+            if (stock) {
+                stock.earningsPerShare = stock.lastPrice / row['P/E (Price/TTM Earnings)']; // lastPrice / PriceEarningsRatio
+                stock.priceEarningsRatio = stock.lastPrice / stock.earningsPerShare;
+                stock.dividendPayoutPercentage = stock.dividendPerShare * 4 / stock.earningsPerShare;
+            }
+        }
+        rows = XLSX.utils.sheet_to_row_object_array(workbook.Sheets['Analyst Opinions']);
+        for (let row of rows) {
+            const companyName = row['Company Name'];
+            if (!companyName) {
+                break; // end of file
+            }
+            let stock = portfolio.stocks.find(s => s.symbol === row['Symbol']);
+            if (stock) {
+                stock.summaryScore = row['Equity Summary Score from StarMine from Refinitiv'];
             }
         }
         // Get portfolio summations
